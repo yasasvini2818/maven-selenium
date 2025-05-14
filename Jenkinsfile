@@ -2,13 +2,15 @@ pipeline {
     agent any
 
     tools {
-        maven 'Maven'
+        maven 'Maven'  // Replace with actual tool names from Jenkins configuration
+        jdk 'JDK'
     }
 
     stages {
         stage('Checkout') {
             steps {
-                Checkout scm
+                checkout scm
+            }
         }
 
         stage('Build') {
@@ -22,20 +24,20 @@ pipeline {
                 sh 'mvn test'
             }
         }
-        stage('Archieve Artifacts')
-        {
-          steps{
-           archieveArtifacts artifacts:'targer/*.jar',fingerprint:true
-    }
-    }
+
+        stage('Archive Artifacts') {
+            steps {
+                archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
+            }
+        }
     }
 
     post {
         success {
-            echo 'Build and tests successful!'
+            echo 'Pipeline completed successfully!'
         }
         failure {
-            echo 'Build or tests failed!'
+            echo 'Pipeline failed!'
         }
     }
 }
